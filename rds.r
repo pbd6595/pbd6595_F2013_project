@@ -1,4 +1,5 @@
-
+library("statnet")
+library("Rcpp")
 gile.rds.trial <- function (g, num.seeds, where = 0) {
   degs=degree(g)
   degs[get.vertex.attribute(g,"infected") == where] <- 0
@@ -220,8 +221,8 @@ make.giles2.tab <- function (base) {
 }
 
 sim_it <- function (seeds = 6, inf.exclude = 2, mode = 0, burnin = 0, spread=2, name = 'noname') {
-  dyn.load("statnet.so")
-  
+#  dyn.load("rdssim.so")
+  sourceCpp("rdssim.cpp")
   plot.new()
   pdf(file = paste(name, "pdf", sep="."))
   layout(matrix(c(1,2,3,4), 2,2))
@@ -339,7 +340,7 @@ run.model <- function   (net.size, seeds, inf.exclude, w, mode, burnin, spread) 
 get_sim <- function (modl, seeds = 6, inf.exclude = 2, mode, burnin, spread) {
   g <- simulate(modl)
   m <- as.matrix(g,matrix.type="edgelist")
-  out <- .C("__Z6samplePKiS0_S0_S0_S0_S0_S0_S0_S0_Pd", as.integer(m), as.integer(length(as.integer(m))), as.integer(network.size(g)), 
+  out <- .C("_Z6samplePKiS0_S0_S0_S0_S0_S0_S0_S0_Pd", as.integer(m), as.integer(length(as.integer(m))), as.integer(network.size(g)), 
 	as.integer(seeds), as.integer(inf.exclude), as.integer(get.vertex.attribute(g,"infected")), as.integer(mode), 
 	as.integer(burnin), as.integer(spread), result=double(4))
   return (matrix(out$result, ncol=4))
@@ -358,6 +359,11 @@ run_sims <-function () {
   
 }
 
-#running models-edited by pbd6595
-sims<-run_sims()
 
+test_rcpp <- function(){
+sourceCpp("rdssim.cpp")
+}
+#running models-edited by pbd6595
+#sims<-run_sims()
+
+test_rcpp()
