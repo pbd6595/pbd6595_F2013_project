@@ -1,5 +1,9 @@
-library("statnet")
 library("Rcpp")
+library("statnet")
+
+
+################# GILE.RDS.TRIAL ####################
+
 gile.rds.trial <- function (g, num.seeds, where = 0) {
   degs=degree(g)
   degs[get.vertex.attribute(g,"infected") == where] <- 0
@@ -39,6 +43,10 @@ gile.rds.trial <- function (g, num.seeds, where = 0) {
   return (infected.total/total.mass)
 }
 
+
+
+################# GILE.GRAPH.MODEL ####################
+
 get.graph.model <- function (graphsize, w) {
   # Set up sample model
   protonet <- network.initialize(graphsize,directed=FALSE)
@@ -50,6 +58,7 @@ get.graph.model <- function (graphsize, w) {
   return (modl)
 }
 
+###############GILE.RDS.EXPERIMENT###############
  gile.rds.experiment <- function (samples, graphsize=1000, w) {
   
  
@@ -60,6 +69,10 @@ get.graph.model <- function (graphsize, w) {
   return (sapply(graphs, function (x) gile.rds.trial (modl=modl,num.seeds=seeds,where=where)))
 }
 
+
+
+################# GILES.BOXPLOTS.2 ####################
+
 giles.boxplots.2 <- function (graphs, ws) {
   graphs: c(1000,835,715,625,555,525)
    #ws: (c(1,1.1,1.4,1.8,3)
@@ -67,6 +80,9 @@ giles.boxplots.2 <- function (graphs, ws) {
   return (lapply(lapply (args, function(x) gile.rds.experiment(1000, x[1], x[2])),
          function (y) lapply (y, function(g) gile.rds.trial (g=g,where=2,num.seeds=6))))
 }
+
+
+################# GILES.BOXPLOTS.1 ####################
 
 giles.boxplot.1 <- function () {
  graphs <- gile.rds.experiment (1000)
@@ -87,11 +103,16 @@ giles.boxplot.1 <- function () {
                   plot(g,vertex.col="infected")
 }
 
+
+################# FORMULATE.CONSTRAINTS ####################
+
 formulate.constraints <- function (size, w) {
   m <- matrix (c(.16*size*size, -.2*size*(.2*size-1)*5/2, 0,  2, 2, 2,  1.6*size, (.8-.2*w)*size, -.4*size*w),3,3, byrow=TRUE)
   return (m)
   return (solve(m, c(0, 7*size, 0)))
 }
+
+################# GILE.DRAWEM ####################
 
 gile.drawem <- function (d) {
   plot.new()
@@ -119,6 +140,8 @@ gile.drawem <- function (d) {
   mtext("Infected", 1, 1.5)
   
 }
+
+################# TESTCHARS ####################
 
 TestChars <- function(sign=1, font=1, ...) {
    if(font == 5) { sign <- 1; r <- c(32:126, 160:254)
@@ -221,8 +244,8 @@ make.giles2.tab <- function (base) {
 }
 
 sim_it <- function (seeds = 6, inf.exclude = 2, mode = 0, burnin = 0, spread=2, name = 'noname') {
-#  dyn.load("rdssim.so")
-  sourceCpp("rdssim.cpp")
+  dyn.load("rdssim.so")
+#  sourceCpp("rdssim.cpp")
   plot.new()
   pdf(file = paste(name, "pdf", sep="."))
   layout(matrix(c(1,2,3,4), 2,2))
@@ -364,6 +387,6 @@ test_rcpp <- function(){
 sourceCpp("rdssim.cpp")
 }
 #running models-edited by pbd6595
-#sims<-run_sims()
+sims<-run_sims()
 
-test_rcpp()
+#test_rcpp()

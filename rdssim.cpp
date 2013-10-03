@@ -1,10 +1,11 @@
 //#include <R.h> //edited by pbd6595-Action:uncommented
-#include <Rcpp.h>
+//#include <Rcpp.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 //#include <time>//edited by pbd6595-Action:uncommented
 //#include "../../snap-core/Snap.h"
+//#include <bd.h>
 #include <Snap.h>
 
 
