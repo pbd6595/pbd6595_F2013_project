@@ -8,16 +8,14 @@
  
 include ../../Makefile.config
 include Makefile.ex
-CXXFLAGS += -g
+CXXFLAGS += -g -fPIC 
 
 all: $(MAIN)
 
 # COMPILE
 $(MAIN): $(MAIN).cpp $(DEPH) $(DEPCPP) $(EXSNAP)/Snap.o 
-	MAKEFLAGS="PKG_CPPFLAGS=-I../../snap-core\ -I../../snap-adv\ -I../../glib-core\ -lrt" R CMD SHLIB -fPIC -shared $(MAIN).cpp $(DEPCPP) $(EXSNAP)/Snap.o -I$(EXSNAP) -I$(EXSNAPADV) -I$(EXGLIB) $(LDFLAGS) $(LIBS)
-	$(CC)  $(CXXFLAGS) -c  -shared $(MAIN).cpp -fPIC -shared -o $(MAIN).o  -I$(EXSNAP) -I$(EXSNAPADV) -I$(EXGLIB)
-	$(CC)  $(CXXFLAGS) -shared -fPIC -o $(MAIN) $(MAIN).o $(DEPCPP) $(EXSNAP)/Snap.o -I$(EXSNAP) -I$(EXSNAPADV) -I$(EXGLIB) $(LDFLAGS) $(LIBS)
-	$(CC)  $(CXXFLAGS) -fPIC -shared -o rdssim.so -fPIC rdssim.cpp -I$(EXSNAP) -I$(EXSNAPADV) -I$(EXGLIB) $(LDFLAGS) $(LIBS)
+	MAKEFLAGS="PKG_CPPFLAGS=-I../../snap-core\ -I../../snap-adv\ -I../../glib-core\ -lrt\ -fPIC" R CMD SHLIB $(MAIN).cpp $(DEPCPP) $(EXSNAP)/Snap.o -I$(EXSNAP) -I$(EXSNAPADV) -I$(EXGLIB) $(LDFLAGS) $(LIBS) 
+	$(CC) $(CXXFLAGS) -o $(MAIN) $(MAIN).cpp $(DEPCPP) $(EXSNAP)/Snap.o -I /usr/share/R/include -I$(EXSNAP) -I$(EXSNAPADV) -I$(EXGLIB) $(LDFLAGS) $(LIBS)
 
 $(EXSNAP)/Snap.o: 
 	make -C $(EXSNAP)

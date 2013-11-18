@@ -1,8 +1,8 @@
-//#include <R.h> //edited by pbd6595-Action:uncommented
+#include <R.h> //edited by pbd6595-Action:uncommented
 //#include <Rcpp.h>
 #include <iostream>
-#include <fstream>
 #include <sstream>
+#include <fstream>
 //#include <time>//edited by pbd6595-Action:uncommented
 //#include "../../snap-core/Snap.h"
 //#include <bd.h>
@@ -87,7 +87,7 @@ double ave_path_length (PUNGraph p) {
   for (TUNGraph::TNodeI n = p->BegNI(); n != p->EndNI(); n++) {
     v = v + n.GetId();
   }
-  //  cerr << "vlen: " << v.Len() << endl;
+   // cerr << "vlen: " << v.Len() << endl;
   TBreathFS<PUNGraph> b(p);
   double tot_pairs = 0.0;
   while (v.Len () > 0) {
@@ -101,10 +101,10 @@ double ave_path_length (PUNGraph p) {
 	tot_pairs += 1;
       }
     }
-    //    cerr << "tps: " << tot_pairs << ", last: " << last << ", beg: " << v[*(v.BegI())] << endl;
+       // cerr << "tps: " << tot_pairs << ", last: " << last << ", beg: " << v[*(v.BegI())] << endl;
     v.Del(v.Len()-1);
   } 
-  // cerr << "paths: " << tot_lengths << " " << tot_pairs << " " << (tot_lengths/tot_pairs) << endl;
+  //cerr << "paths: " << tot_lengths << " " << tot_pairs << " " << (tot_lengths/tot_pairs) << endl;
   return tot_lengths / tot_pairs;
 }
 THash<TInt, TInt> * choose_seeds (const PUNGraph g, const int num, const int * infection_state, const int infect) {
@@ -167,6 +167,8 @@ void get_graph_stats (const int *m, const int *n, const int *h) {
 }
 
 void sample (const int *m, const int *n, const int *h, const int *ns, const int *in, const int *infection_state, const int *mde, const int *bi, const int *br, double * result) {
+  
+  cerr<< "it all begins HERE..!!"<<endl;
   const int nodes = *h;
   const int nval = (*n)/2;
   int num_seeds = *ns;
@@ -175,17 +177,31 @@ void sample (const int *m, const int *n, const int *h, const int *ns, const int 
   int burnin = *bi;
   int branch = *br;
 
+  cerr << "Here we are!!!\n";
+  //cerr << "n: " << *n;
+  //cerr << "\n";
+  //cerr << "m: " << *m << endl;
+  //cerr << "h: " << *h << endl;
+  //cerr << "ns: " << *ns << endl;
+  //cerr << "in: " << *in << endl;
+  //cerr << "infection_state: " << *infection_state << endl;
+  //cerr << "mde: " << *mde << endl;
+  //cerr << "bi: " << *bi << endl;
+  //cerr << "br: " << *br << endl;
+  ///cerr << "sizeof(result): " << sizeof(result) << endl;
+  //cerr << *h;
+
   PUNGraph g = get_PUNGraph (m, nval, nodes);
 
   THash<TInt, TInt> * visited = choose_seeds (g, num_seeds, infection_state, infect_type);
   TVec <VisitedNode *>  queue;
   TIntV qids;
   
-
+  
   for (THash<TInt, TInt>::TIter n = visited->BegI(); n != visited->EndI(); n++) {
     queue = queue + new VisitedNode (n->Key);
     qids = qids + n->Key;
-    //cerr << "enqueued " << n->Key << endl;
+    cerr << "enqueued " << n->Key << endl;
   }
   TInt counted = 0;
   TInt first_unprocessed = 0;
@@ -199,14 +215,14 @@ void sample (const int *m, const int *n, const int *h, const int *ns, const int 
     first_unprocessed++;
     TUNGraph::TNodeI NI = g->GetNI (current_node->id);
     TInt neighborhood_size = NI.GetDeg();
-    //  cerr << counted << " " << current_node->id << endl;
+    //cerr << counted << " " << current_node->id << endl;
     if (counted >= burnin) {
       if (infection_state[(current_node->id) - 1] == 1)
        infected_mass += 1.0/TFlt(neighborhood_size);
       total_mass += 1.0/TFlt(neighborhood_size);
     }
-    //cerr << current_node->id << "\t" << neighborhood_size << "\t" << (1.0/TFlt(neighborhood_size)) 
-    //	 << "\t" << infection_state[(current_node->id) - 1] << "\t" << infected_mass << "\t" << total_mass << endl;
+   //cerr << current_node->id << "\t" << neighborhood_size << "\t" << (1.0/TFlt(neighborhood_size)) 
+    	// << "\t" << infection_state[(current_node->id) - 1] << "\t" << infected_mass << "\t" << total_mass << endl;
     
     // build list of unvisited neighbors
     TVec<TInt> neighbors;
@@ -231,7 +247,7 @@ void sample (const int *m, const int *n, const int *h, const int *ns, const int 
     counted++;
   }
     
-  // cout << (infected_mass / total_mass) << endl;
+ // cerr << "proportion of infected: " << (infected_mass / total_mass) << endl;
   delete (visited);
   result[0] = (infected_mass / total_mass);
   result[1] = revisits;
@@ -243,8 +259,10 @@ void sample (const int *m, const int *n, const int *h, const int *ns, const int 
   result[4] = TSnap::GetClustCf(p, -1);
   TSnap::GetWccs(p, convec);
   result[5] = convec.Len();
+  cerr << "almost home!" << endl;
   
   result[6] = ave_path_length (p);
+  cerr << "let us return!!!" << endl;
 }
 
 void get_edges (ifstream & file, int * edges, int numedges) {
@@ -285,12 +303,12 @@ void process_file (TInt num_seeds, TInt seed_bias, TInt mode, TInt burn, TInt br
 
 void run_short (TInt num_seeds, TInt seed_bias, TInt mode, TInt burn, TInt branch, const char *  input_name) {
   char line[1024];
-  sprintf (line, "g-%s-s%d-%s-bu%d-%s-%d.out", input_name, (int) num_seeds, biasNames[seed_bias].c_str(), (int) burn, modeNames[mode].c_str(), (int) branch);
+  //sprintf (line, "g-%s-s%d-%s-bu%d-%s-%d.out", input_name, (int) num_seeds, biasNames[seed_bias].c_str(), (int) burn, modeNames[mode].c_str(), (int) branch);
   ofstream outfile (line);
   outfile << "id est revisit intree samplesize netsize subclustercf subapl subccs" << endl;
 
   //  cerr << line << endl;
-  sprintf( line, "%s.graph", input_name);
+  //sprintf( line, "%s.graph", input_name);
   process_file (num_seeds, seed_bias, mode, burn, branch, line, outfile);
 
 }
@@ -299,14 +317,14 @@ void run_long (TInt num_seeds, TInt seed_bias,  TInt mode,TInt burn,
 	       TInt branch, const char * input_name) {
 
   char line[1024];
-  sprintf (line, "g-%s-s%d-%s-bu%d-%s-%d.out", input_name, (int) num_seeds, biasNames[seed_bias].c_str(), (int) burn, modeNames[mode].c_str(), (int) branch);
+  //sprintf (line, "g-%s-s%d-%s-bu%d-%s-%d.out", input_name, (int) num_seeds, biasNames[seed_bias].c_str(), (int) burn, modeNames[mode].c_str(), (int) branch);
   ofstream outfile (line);
   cout << "outfile: " << line << endl;
   outfile << "id est revisit intree samplesize subclustercf subccs subapl netsize" << endl;
 
   int sizes [] = {1000, 835, 715,625,555, 525};
   for (int i = 0; i < 6; i++) {
-    sprintf( line, "g-%d-%s.graph", sizes[i], input_name);
+    //sprintf( line, "g-%d-%s.graph", sizes[i], input_name);
     process_file (num_seeds, seed_bias, mode, burn, branch, line, outfile);
   }
 }
@@ -314,14 +332,14 @@ void run_long (TInt num_seeds, TInt seed_bias,  TInt mode,TInt burn,
 void run_graph_long ( const char * input_name) {
 
   char line[1024];
-  sprintf (line, "g-%s.out", input_name);
+  //sprintf (line, "g-%s.out", input_name);
   ofstream outfile (line);
   cout << "outfile: " << line << endl;
   outfile << "id clustercf comps apl netsize" << endl;
 
   int sizes [] = {1000, 835, 715,625,555, 525};
   for (int i = 0; i < 6; i++) {
-    sprintf( line, "g-%d-%s.graph", sizes[i], input_name);
+   // sprintf( line, "g-%d-%s.graph", sizes[i], input_name);
     ifstream file (line);
     cerr << "infile: " << line << endl;
     string s;
@@ -351,6 +369,7 @@ void run_graph_long ( const char * input_name) {
 int main(int argc, char* argv[]) {
  
   TCon console;
+  cerr<<"RUN LONG"<<endl;
   Env = TEnv(argc, argv, TNotify::StdNotify);
   //Env.PrepArgs(TStr(), 1, true);
   const TInt num_seeds = Env.GetIfArgPrefixInt 
@@ -369,12 +388,15 @@ int main(int argc, char* argv[]) {
     ("-file:", "", "Input graph filename, without .graph extension");
 
   if (graphstats == 0) {
+      cout<<"RUN LONG"<<endl;
     run_long (num_seeds, seed_bias, mode, burn, branch, input_name());
   }
   else if (graphstats == 1) {
+    cout<<"RUN SHORT"<<endl;
     run_short (num_seeds, seed_bias, mode, burn, branch, input_name());
   }
   else if (graphstats == 2) {
+    cout<<"RUN GRAPH LONG"<<endl;
     run_graph_long (input_name());
   }
 }

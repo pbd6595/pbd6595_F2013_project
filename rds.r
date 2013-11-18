@@ -243,7 +243,7 @@ make.giles2.tab <- function (base) {
  
 }
 
-sim_it <- function (seeds = 6, inf.exclude = 2, mode = 0, burnin = 0, spread=2, name = 'noname') {
+sim_it <- function (seeds = 6, inf.exclude = 2, mode = 0, burnin = 0, spread=2, name = 'test4') {
   dyn.load("rdssim.so")
 #  sourceCpp("rdssim.cpp")
   plot.new()
@@ -251,28 +251,28 @@ sim_it <- function (seeds = 6, inf.exclude = 2, mode = 0, burnin = 0, spread=2, 
   layout(matrix(c(1,2,3,4), 2,2))
   par(oma=c(3, 4, 0, 0), mar=rep(2, 4), cex=.7)
 
-  run.models (seeds, inf.exclude, 1.1, mode, burnin, spread, name)
-  run.models (seeds, inf.exclude, 1.4, mode, burnin, spread, name)
-  run.models (seeds, inf.exclude, 1.8, mode, burnin, spread, name)
+  #run.models (seeds, inf.exclude, 1.1, mode, burnin, spread, name)
+  #run.models (seeds, inf.exclude, 1.4, mode, burnin, spread, name)
+  #run.models (seeds, inf.exclude, 1.8, mode, burnin, spread, name)
   run.models (seeds, inf.exclude, 3.0, mode, burnin, spread, name)
   dev.off()
 }
 
 run.models <- function (seeds, inf.exclude, w, mode, burnin, spread, name) {
   d <- rbind (run.model(1000, seeds, inf.exclude, w, mode, burnin, spread),
-              run.model (835, seeds, inf.exclude, w, mode, burnin, spread),
-              run.model (715, seeds, inf.exclude, w, mode, burnin, spread),
-              run.model (625, seeds, inf.exclude, w, mode, burnin, spread),
+             #run.model (835, seeds, inf.exclude, w, mode, burnin, spread),
+              #run.model (715, seeds, inf.exclude, w, mode, burnin, spread),
+              #run.model (625, seeds, inf.exclude, w, mode, burnin, spread),
               run.model (555, seeds, inf.exclude, w, mode, burnin, spread))
   save(d, file=paste(name, format(w,digits=2), "Rdata", sep="."))
-  boxplot(est ~ netsize, d, ylim=c(.1,.3))
+  boxplot(est ~ netsize, d, ylim=c(0,10))
   mtext(paste ("w =", format(w,digits=2)), 1, 1, adj=-.1, ce=.7)
   abline(h=.2,lty=2,col="blue", xpd=FALSE)
 
 }
 read.and.draw <- function (file, l, name = "", outer=TRUE) {
   tab <- read.table (file, header = TRUE, sep=" ")
-  boxplot(est ~ netsize, tab[tab$netsize==525|tab$netsize==715|tab$netsize==1000,], ylim=c(.1,.3))
+  boxplot(est ~ netsize, tab[tab$netsize==525|tab$netsize==715|tab$netsize==1000,], ylim=c(0,1))
   if(outer == TRUE) {
     mtext(paste ("w =", format(l,digits=2)), 2, 2) #, adj=-.1, ce=.7)
   }
@@ -363,22 +363,26 @@ run.model <- function   (net.size, seeds, inf.exclude, w, mode, burnin, spread) 
 get_sim <- function (modl, seeds = 6, inf.exclude = 2, mode, burnin, spread) {
   g <- simulate(modl)
   m <- as.matrix(g,matrix.type="edgelist")
+  s <- 2
+  #out <- .C("_Z6samplePKiS0_S0_S0_S0_S0_S0_S0_S0_Pd", as.integer(m), as.integer(length(as.integer(m))), as.integer(network.size(g)), 
+#	as.integer(seeds), as.integer(inf.exclude), as.integer(get.vertex.attribute(g,"infected")), as.integer(mode), 
+#	as.integer(burnin), as.integer(spread), result=double(4))
   out <- .C("_Z6samplePKiS0_S0_S0_S0_S0_S0_S0_S0_Pd", as.integer(m), as.integer(length(as.integer(m))), as.integer(network.size(g)), 
 	as.integer(seeds), as.integer(inf.exclude), as.integer(get.vertex.attribute(g,"infected")), as.integer(mode), 
-	as.integer(burnin), as.integer(spread), result=double(4))
-  return (matrix(out$result, ncol=4))
+	as.integer(burnin), as.integer(s), result=double(7))
+  return (matrix(out$result, ncol=7))
 }
 
 
 run_sims <-function () {
   sim_it(6,2,1,0,"g2-replace");
-  sim_it(6,2,2,0,"g2-dag");
-  sim_it(6,1,1,0,"g2-replace-non");
-  sim_it(6,1,2,0,"g2-dag-non");
-  sim_it(6,0,1,0,"g2-replace-inf");
-  sim_it(6,0,2,0,"g2-dag-inf");
-  sim_it(6,1,0,0,"g2-rds-non");
-  sim_it(6,0,0,0,"g2-rds-inf");
+  #sim_it(6,2,2,0,"g2-dag");
+ #sim_it(6,1,1,0,"g2-replace-non");
+  #sim_it(6,1,2,0,"g2-dag-non");
+  #sim_it(6,0,1,0,"g2-replace-inf");
+  #sim_it(6,0,2,0,"g2-dag-inf");
+  #sim_it(6,1,0,0,"g2-rds-non");
+  #sim_it(6,0,0,0,"g2-rds-inf");
   
 }
 
