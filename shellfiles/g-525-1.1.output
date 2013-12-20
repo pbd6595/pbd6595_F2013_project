@@ -1,0 +1,196 @@
+
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> source ('rds.r')
+Loading required package: statnet.common
+Loading required package: network
+network: Classes for Relational Data
+Version 1.8.1 created on 2013-09-11.
+copyright (c) 2005, Carter T. Butts, University of California-Irvine
+                    Mark S. Handcock, University of Washington
+                    David R. Hunter, Penn State University
+                    Martina Morris, University of Washington
+ For citation information, type citation("network").
+ Type help("network-package") to get started.
+
+Loading required package: ergm
+Loading required package: robustbase
+Loading required package: Matrix
+Loading required package: trust
+Loading required package: nlme
+Loading required package: coda
+Loading required package: lattice
+
+ergm: version 3.1-0, created on 2013-04-17
+Copyright (c) 2013, Mark S. Handcock, University of California -- Los Angeles
+                    David R. Hunter, Penn State University
+                    Carter T. Butts, University of California -- Irvine
+                    Steven M. Goodreau, University of Washington
+                    Pavel N. Krivitsky, Penn State University
+                    Martina Morris, University of Washington
+Based on "statnet" project software (statnet.org).
+For license and citation information see statnet.org/attribution
+or type citation("ergm").
+
+NOTE: If you use custom ERGM terms based on ‘ergm.userterms’ version
+prior to 3.1, you will need to perform a one-time update of the package
+boilerplate files (the files that you did not write or modify) from
+‘ergm.userterms’ 3.1 or later. See help('eut-upgrade') for
+instructions.
+
+NOTE: Dynamic network modeling functionality (STERGMs) has been moved
+to a new package, ‘tergm’.
+
+Loading required package: sna
+sna: Tools for Social Network Analysis
+Version 2.3-1 created on 2013-02-28.
+copyright (c) 2005, Carter T. Butts, University of California-Irvine
+ For citation information, type citation("sna").
+ Type help(package="sna") to get started.
+
+
+Attaching package: ‘sna’
+
+The following object is masked from ‘package:nlme’:
+
+    gapply
+
+The following object is masked from ‘package:network’:
+
+    %c%
+
+Loading required package: networkDynamic
+
+networkDynamic: version 0.5.0, created on 2013-09-06
+Copyright (c) 2013, Carter T. Butts, University of California -- Irvine
+                    Ayn Leslie-Cook, University of Washington
+                    Pavel N. Krivitsky
+                    Skye Bender-deMoll, University of Washington
+                    with contributions from
+                    Zack Almquist, University of California -- Irvine
+                    David R. Hunter, Penn State University
+                    Li Wang
+                    Kirk Li, University of Washington
+                    Steven M. Goodreau, University of Washington
+                    Martina Morris, University of Washington
+Based on "statnet" project software (statnet.org).
+For license and citation information see statnet.org/attribution
+or type citation("networkDynamic").
+
+
+Attaching package: ‘networkDynamic’
+
+The following objects are masked from ‘package:network’:
+
+    add.edge, add.edges, add.vertices
+
+Loading required package: tergm
+
+tergm: version 3.1-0, created on 2013-04-26
+Copyright (c) 2013, Pavel N. Krivitsky, Penn State University
+                    Mark S. Handcock, University of California -- Los Angeles
+                    with contributions from
+                    David R. Hunter, Penn State University
+                    Steven M. Goodreau, University of Washington
+                    Martina Morris, University of Washington
+                    Nicole Bohme Carnegie, New York University
+                    Carter T. Butts, University of California -- Irvine
+                    Ayn Leslie-Cook, University of Washington
+Based on "statnet" project software (statnet.org).
+For license and citation information see statnet.org/attribution
+or type citation("tergm").
+
+Loading required package: ergm.count
+
+ergm.count: version 3.1-0, created on 2013-03-29
+Copyright (c) 2013, Pavel N. Krivitsky, Penn State University
+                    with contributions from
+                    Mark S. Handcock, University of California -- Los Angeles
+                    David R. Hunter, Penn State University
+Based on "statnet" project software (statnet.org).
+For license and citation information see statnet.org/attribution
+or type citation("ergm.count").
+
+Loading required package: latentnet
+Loading required package: abind
+Loading required package: tools
+Loading required package: mvtnorm
+
+latentnet: version 2.4-5, created on 2013-06-02
+Copyright (c) 2013, Pavel N. Krivitsky, Penn State University
+                    Mark S. Handcock, University of California -- Los Angeles
+                    with contributions from
+                    Susan M. Shortreed
+                    Jeremy Tantrum
+                    Peter D. Hoff
+Based on "statnet" project software (statnet.org).
+For license and citation information see statnet.org/attribution
+or type citation("latentnet").
+
+
+Attaching package: ‘latentnet’
+
+The following object is masked from ‘package:coda’:
+
+    as.mcmc
+
+The following object is masked from ‘package:base’:
+
+    scale
+
+
+statnet: version 3.1-0, created on 2013-05-09
+Copyright (c) 2013, Mark S. Handcock, University of California -- Los Angeles
+                    David R. Hunter, Penn State University
+                    Carter T. Butts, University of California -- Irvine
+                    Steven M. Goodreau, University of Washington
+                    Pavel N. Krivitsky, Penn State University
+                    Martina Morris, University of Washington
+Based on "statnet" project software (statnet.org).
+For license and citation information see statnet.org/attribution
+or type citation("statnet").
+
+> get.more.tests(525,1.1,'g-525-1.1')
+Iteration 1 of at most 20: 
+Convergence test P-value: 1.4e-01 
+The log-likelihood improved by 0.006742 
+Iteration 2 of at most 20: 
+Convergence test P-value: 4.3e-02 
+The log-likelihood improved by 0.01108 
+Iteration 3 of at most 20: 
+Convergence test P-value: 7.8e-02 
+The log-likelihood improved by 0.008281 
+Iteration 4 of at most 20: 
+Convergence test P-value: 3.6e-01 
+The log-likelihood improved by 0.003846 
+Iteration 5 of at most 20: 
+Convergence test P-value: 5.7e-01 
+Convergence detected. Stopping.
+The log-likelihood improved by 0.002404 
+
+This model was fit using MCMC.  To examine model diagnostics and check for degeneracy, use the mcmc.diagnostics() function.
+Warning messages:
+1: glm.fit: fitted probabilities numerically 0 or 1 occurred 
+2: glm.fit: fitted probabilities numerically 0 or 1 occurred 
+> 
+> proc.time()
+   user  system elapsed 
+ 44.648   0.268  44.971 
