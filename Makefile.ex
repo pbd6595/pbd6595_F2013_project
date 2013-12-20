@@ -2,7 +2,7 @@
 #	configuration variables for the example
 
 ## Main application file
-MAIN = rdssim
+MAIN = statnet
 DEPH = 
 DEPCPP = 
 

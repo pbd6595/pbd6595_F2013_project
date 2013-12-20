@@ -1,8 +1,8 @@
-//#include <R.h> //edited by pbd6595-Action:uncommented
+//#include <R.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-//#include <time>//edited by pbd6595-Action:uncommented
+//#include <time>
 #include "../../snap-core/Snap.h"
 
 
@@ -300,8 +300,8 @@ void run_long (TInt num_seeds, TInt seed_bias,  TInt mode,TInt burn,
   cout << "outfile: " << line << endl;
   outfile << "id est revisit intree samplesize subclustercf subccs subapl netsize" << endl;
 
-  int sizes [] = {1000, 835, 715,625,555, 525};
-  for (int i = 0; i < 6; i++) {
+  int sizes [] = {1000, 715, 525};
+  for (int i = 0; i < 3; i++) {
     sprintf( line, "g-%d-%s.graph", sizes[i], input_name);
     process_file (num_seeds, seed_bias, mode, burn, branch, line, outfile);
   }
@@ -315,7 +315,7 @@ void run_graph_long ( const char * input_name) {
   cout << "outfile: " << line << endl;
   outfile << "id clustercf comps apl netsize" << endl;
 
-  int sizes [] = {1000, 835, 715,625,555, 525};
+  int sizes [] = {1000, 715, 525};
   for (int i = 0; i < 6; i++) {
     sprintf( line, "g-%d-%s.graph", sizes[i], input_name);
     ifstream file (line);
